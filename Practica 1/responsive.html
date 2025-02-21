@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Layout Responsivo</title>
+    <style>
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            margin: auto;
+            background: lightgreen;
+            padding: 20px;
+            text-align: center;
+        }
+        @media (max-width: 768px) {
+            .container {
+                background: orange;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Layout Responsivo</h1>
+        <p>Se adapta a diferentes tamaños de pantalla.</p>
+    </div>
+</body>
+</html>
