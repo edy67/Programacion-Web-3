@@ -1,0 +1,111 @@
+Resultados y Tiempos
+Consulta Básica:
+
+
+
+Datos: {
+  "time": "13 ms", // tiempo
+  "data": [
+    {
+      "id": 1,
+      "nombre": "Eduardo Ricardo Condori Mamani",
+      "edad": 20,
+      "email": "eduriccm@gmail.com",
+      "telefono": "76760661",
+      "direccion": "La PAz, Zona Portada",
+      "fecha_registro": "2025-03-16T21:41:06.000Z"
+    },
+    {
+      "id": 2,
+      "nombre": "Leonor Chavarría",
+      "edad": 0,
+      "email": "leo123@gmail.com",
+      "telefono": "78789635",
+      "direccion": "San Miguel Calle 21 ",
+      "fecha_registro": "2025-03-18T22:25:07.000Z"
+    },
+    {
+      "id": 3,
+      "nombre": "Juan Perez Delagodo",
+      "edad": 0,
+      "email": "juan23@gmail.com",
+      "telefono": "74856325",
+      "direccion": "El Alto, C.Satelite av.Esperanza",
+      "fecha_registro": "2025-03-18T22:45:49.000Z"
+    }
+  ]
+}
+
+Consulta con Promesas:
+
+Tiempo: 0.000 ms
+
+Datos: {
+  "time": "12 ms",
+  "data": [
+    {
+      "id": 1,
+      "nombre": "Eduardo Ricardo Condori Mamani",
+      "edad": 20,
+      "email": "eduriccm@gmail.com",
+      "telefono": "76760661",
+      "direccion": "La PAz, Zona Portada",
+      "fecha_registro": "2025-03-16T21:41:06.000Z"
+    },
+    {
+      "id": 2,
+      "nombre": "Leonor Chavarría",
+      "edad": 0,
+      "email": "leo123@gmail.com",
+      "telefono": "78789635",
+      "direccion": "San Miguel Calle 21 ",
+      "fecha_registro": "2025-03-18T22:25:07.000Z"
+    },
+    {
+      "id": 3,
+      "nombre": "Juan Perez Delagodo",
+      "edad": 0,
+      "email": "juan23@gmail.com",
+      "telefono": "74856325",
+      "direccion": "El Alto, C.Satelite av.Esperanza",
+      "fecha_registro": "2025-03-18T22:45:49.000Z"
+    }
+  ]
+}  
+
+Consulta con Pooling:
+
+Tiempo: 0.000 ms
+
+Datos: {
+  "time": "1 ms",
+  "data": [
+    {
+      "id": 1,
+      "nombre": "Eduardo Ricardo Condori Mamani",
+      "edad": 20,
+      "email": "eduriccm@gmail.com",
+      "telefono": "76760661",
+      "direccion": "La PAz, Zona Portada",
+      "fecha_registro": "2025-03-16T21:41:06.000Z"
+    },
+    {
+      "id": 2,
+      "nombre": "Leonor Chavarría",
+      "edad": 0,
+      "email": "leo123@gmail.com",
+      "telefono": "78789635",
+      "direccion": "San Miguel Calle 21 ",
+      "fecha_registro": "2025-03-18T22:25:07.000Z"
+    },
+    {
+      "id": 3,
+      "nombre": "Juan Perez Delagodo",
+      "edad": 0,
+      "email": "juan23@gmail.com",
+      "telefono": "74856325",
+      "direccion": "El Alto, C.Satelite av.Esperanza",
+      "fecha_registro": "2025-03-18T22:45:49.000Z"
+    }
+  ]
+}
