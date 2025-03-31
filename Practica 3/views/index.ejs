@@ -1,0 +1,159 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap 4 CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+    <!-- SweetAlert2 -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <style>
+        /* Personalizar la transición del modal */
+        #modalAgregar.fade .modal-dialog {
+            transition: transform 0.4s ease-out, opacity 0.4s ease-out;
+            transform: translate(0, -50px); /* Desplazamiento inicial */
+            opacity: 0; /* Transparencia inicial */
+        }
+
+        #modalAgregar.show .modal-dialog {
+            transform: translate(0, 0); /* Posición final */
+            opacity: 1; /* Opacidad final */
+        }
+
+        #modalEditar.fade .modal-dialog {
+            transition: transform 0.4s ease-out, opacity 0.4s ease-out;
+            transform: translate(0, -50px); /* Desplazamiento inicial */
+            opacity: 0; /* Transparencia inicial */
+        }
+
+        #modalEditar.show .modal-dialog {
+            transform: translate(0, 0); /* Posición final */
+            opacity: 1; /* Opacidad final */
+        }
+        
+    </style>
+</head>
+<body>
+    
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary shadow">
+        <a class="navbar-brand" href="#">MEDITEC</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item active">
+                    <a class="nav-link" href="#">Inicio <span class="sr-only">(current)</span></a>
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Medicamento
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        <a class="dropdown-item" href="#">Acciones</a>
+                        <a class="dropdown-item" href="#">Filtrado</a>
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item" href="#">Tipo</a>
+                    </div>
+                </li>
+            </ul>
+            <form class="form-inline my-2 my-lg-0">
+                <input class="form-control mr-sm-2" type="search" placeholder="Buscar" aria-label="Search">
+                <button class="btn btn-outline-light my-2 my-sm-0" type="submit">Buscar</button>
+            </form>
+        </div>
+    </nav>
+
+    <!-- Contenedor principal -->
+    <div class="container mt-4">
+        <!-- Botón de agregar -->
+        <a href="/create" class="btn btn-primary btn-lg mb-4 shadow" data-toggle="modal" data-target="#modalAgregar">
+            <i class="fa-solid fa-plus"></i> Agregar Medicamento
+        </a>
+
+        <!-- Tabla -->
+        <table class="table table-striped table-bordered shadow">
+            <thead class="thead-dark">
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Nombre</th>
+                    <th scope="col">Descripción</th>
+                    <th scope="col">Precio</th>
+                    <th scope="col">Cantidad stock</th>
+                    <th scope="col">Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% let contador = 1; %>
+                <% results.forEach((medicamento) => { %>
+                    <tr>
+                        <th scope="row"><%= contador %></th>
+                        <td><%= medicamento.nombre %></td>
+                        <td><%= medicamento.descripcion %></td>
+                        <td><%= medicamento.precio %></td>
+                        <td><%= medicamento.cantidadStock %></td>
+                        <td>
+                            <!-- Botón para editar -->
+                            <a href="/edit/<%= medicamento.id %>" class="btn btn-info btn-sm mr-2">Editar</a>
+                            <!-- Formulario para eliminar -->
+                            <form action="/delete/<%= medicamento.id %>" method="POST" style="display: inline;">
+                                <button type="submit" class="btn btn-danger btn-sm">Eliminar</button>
+                            </form>
+                        </td>
+                    </tr>
+                    <% contador++; %>
+                <% }); %>
+            </tbody>
+        </table>
+
+        <!-- Modal para agregar -->
+        <div class="modal fade" id="modalAgregar" tabindex="-1" aria-labelledby="modalAgregarLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content shadow">
+                    <div class="modal-header bg-primary text-white">
+                        <h5 class="modal-title" id="modalAgregarLabel">Agregar Medicamento</h5>
+                        <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <form action="/save" method="POST">
+                        <div class="modal-body">
+                            <div class="form-group">
+                                <label for="nombre">Nombre</label>
+                                <input type="text" class="form-control" name="nombre" id="nombre" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="descripcion">Descripción</label>
+                                <textarea class="form-control" name="descripcion" id="descripcion" required></textarea>
+                            </div>
+                            <div class="form-group">
+                                <label for="precio">Precio</label>
+                                <input type="number" class="form-control" name="precio" id="precio" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="cantidadStock">Cantidad en Stock</label>
+                                <input type="number" class="form-control" name="cantidadStock" id="cantidadStock" required>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                            <button type="submit" class="btn btn-primary">Guardar</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- jQuery, Popper.js, y Bootstrap 4 JS -->
+    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+</body>
+</html>

@@ -84,15 +84,14 @@ const poolQuery = async (req, res) => {
   }
 };
 
-
-// Función para insertar un usuario en la base de datos
+// Función para insertar un usuario en la base de datos (con edad)
 const addUser = async (req, res) => {
-  const { nombre, email, telefono, direccion } = req.body; // Obtener los datos del formulario
+  const { nombre, edad, email, telefono, direccion } = req.body; // Obtener los datos del formulario
 
-  const query = 'INSERT INTO usuarios (nombre, email, telefono, direccion) VALUES (?, ?, ?, ?)';
+  const query = 'INSERT INTO usuarios (nombre, edad, email, telefono, direccion) VALUES (?, ?, ?, ?, ?)';
   
   try {
-    const [result] = await promisePool.execute(query, [nombre, email, telefono, direccion]);
+    const [result] = await promisePool.execute(query, [nombre, edad, email, telefono, direccion]);
     res.json({
       message: 'Usuario creado exitosamente',
       id: result.insertId,  // Devolver el ID del nuevo usuario insertado

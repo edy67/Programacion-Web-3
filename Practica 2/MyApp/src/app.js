@@ -1,5 +1,3 @@
-
-
 const express = require('express');
 const path = require('path');
 const dbController = require('./controllers/dbController');
@@ -45,18 +43,20 @@ const rl = readline.createInterface({
 // Función para agregar un usuario desde la consola
 const agregarUsuarioConsola = async () => {
   rl.question('Ingrese el nombre del usuario: ', async (nombre) => {
-    rl.question('Ingrese el email del usuario: ', async (email) => {
-      rl.question('Ingrese el teléfono del usuario: ', async (telefono) => {
-        rl.question('Ingrese la dirección del usuario: ', async (direccion) => {
-          const query = 'INSERT INTO usuarios (nombre, email, telefono, direccion) VALUES (?, ?, ?, ?)';
-          try {
-            const [result] = await connection.execute(query, [nombre, email, telefono, direccion]);
-            console.log('Usuario creado exitosamente con ID:', result.insertId);
-            rl.close();
-          } catch (err) {
-            console.error('Error al crear el usuario:', err);
-            rl.close();
-          }
+    rl.question('Ingrese la edad del usuario: ', async (edad) => {
+      rl.question('Ingrese el email del usuario: ', async (email) => {
+        rl.question('Ingrese el teléfono del usuario: ', async (telefono) => {
+          rl.question('Ingrese la dirección del usuario: ', async (direccion) => {
+            const query = 'INSERT INTO usuarios (nombre, edad, email, telefono, direccion, fecha_registro) VALUES (?, ?, ?, ?, ?, NOW())';
+            try {
+              const [result] = await connection.execute(query, [nombre, edad, email, telefono, direccion]);
+              console.log('Usuario creado exitosamente con ID:', result.insertId);
+              rl.close();
+            } catch (err) {
+              console.error('Error al crear el usuario:', err);
+              rl.close();
+            }
+          });
         });
       });
     });
@@ -86,28 +86,31 @@ const eliminarUsuarioConsola = async () => {
 const actualizarUsuarioConsola = async () => {
   rl.question('Ingrese el ID del usuario a actualizar: ', async (userId) => {
     rl.question('Ingrese el nuevo nombre del usuario: ', async (nombre) => {
-      rl.question('Ingrese el nuevo email del usuario: ', async (email) => {
-        rl.question('Ingrese el nuevo teléfono del usuario: ', async (telefono) => {
-          rl.question('Ingrese la nueva dirección del usuario: ', async (direccion) => {
-            const query = 'UPDATE usuarios SET nombre = ?, email = ?, telefono = ?, direccion = ? WHERE id = ?';
-            try {
-              const [result] = await connection.execute(query, [nombre, email, telefono, direccion, userId]);
-              if (result.affectedRows > 0) {
-                console.log('Usuario actualizado exitosamente.');
-              } else {
-                console.log('No se encontró un usuario con ese ID.');
+      rl.question('Ingrese la nueva edad del usuario: ', async (edad) => {  // Agregar la edad
+        rl.question('Ingrese el nuevo email del usuario: ', async (email) => {
+          rl.question('Ingrese el nuevo teléfono del usuario: ', async (telefono) => {
+            rl.question('Ingrese la nueva dirección del usuario: ', async (direccion) => {
+              const query = 'UPDATE usuarios SET nombre = ?, edad = ?, email = ?, telefono = ?, direccion = ? WHERE id = ?';
+              try {
+                const [result] = await connection.execute(query, [nombre, edad, email, telefono, direccion, userId]);
+                if (result.affectedRows > 0) {
+                  console.log('Usuario actualizado exitosamente.');
+                } else {
+                  console.log('No se encontró un usuario con ese ID.');
+                }
+                rl.close();
+              } catch (err) {
+                console.error('Error al actualizar el usuario:', err);
+                rl.close();
               }
-              rl.close();
-            } catch (err) {
-              console.error('Error al actualizar el usuario:', err);
-              rl.close();
-            }
+            });
           });
         });
       });
     });
   });
 };
+
 
 // Menú de la consola para elegir la operación
 const mostrarMenu = () => {
