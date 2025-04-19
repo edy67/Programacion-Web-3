@@ -89,17 +89,17 @@
     <!-- Resultados de las consultas -->
     <div id="result" class="result">
       <h3>Resultados y Tiempos</h3>
-      <pre id="queryResult">Aquí aparecerán los resultados...</pre>
+      <pre id="queryResult"></pre>
     </div>
   </div>
 
   <script>
-    // Función para manejar la solicitud POST para agregar un usuario
+    // Función para manejar la solicitud 
     document.getElementById('addUserForm').addEventListener('submit', async (event) => {
       event.preventDefault();  // Prevenir el comportamiento por defecto del formulario
 
       const nombre = document.getElementById('nombre').value;
-      const edad = document.getElementById('edad').value;  // Obtener la edad
+      const edad = document.getElementById('edad').value;  
       const email = document.getElementById('email').value;
       const telefono = document.getElementById('telefono').value;
       const direccion = document.getElementById('direccion').value;
@@ -110,11 +110,11 @@
         headers: {
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify({ nombre, edad, email, telefono, direccion })  // Incluir la edad
+        body: JSON.stringify({ nombre, edad, email, telefono, direccion })  
       });
 
       const data = await response.text();
-      document.getElementById('queryResult').textContent = data;  // Mostrar la respuesta en el frontend
+      document.getElementById('queryResult').textContent = data;  
     });
 
     // Funciones para ejecutar las consultas con tiempos

@@ -4,7 +4,7 @@ const conexion = require('./database/db');
 
 // Ruta principal
 router.get('/', (req, res) => {
-    conexion.query('SELECT * FROM medicamento', (error, results) => {
+    conexion.query('SELECT * FROM libros', (error, results) => {
         if (error) {
             console.error('Error al ejecutar la consulta:', error);
             return res.status(500).send('Error al obtener los medicamentos');
@@ -17,13 +17,13 @@ router.get('/', (req, res) => {
 
 router.get('/edit/:id',(req,res)=>{
     const id=req.params.id;
-    conexion.query('SELECT * FROM medicamento WHERE id=?',[id],(error,results)=>{
+    conexion.query('SELECT * FROM libros WHERE id=?',[id],(error,results)=>{
         if (error) {
             console.error('Error al ejecutar la consulta:', error);
             return res.status(500).send('Error al obtener los medicamentos');
         }
         // Renderiza la vista "index.ejs" y pasa los resultados de la consulta
-        res.render('edit', { medicamento: results[0] });
+        res.render('edit', { libros: results[0] });
     });
 })
 const crud=require('./controllers/crud');
@@ -36,7 +36,7 @@ router.post('/delete/:id', (req, res) => {
     const id = req.params.id;
   
     
-    conexion.query('DELETE FROM medicamento WHERE id = ?', [id], (error, results) => {
+    conexion.query('DELETE FROM libros WHERE id = ?', [id], (error, results) => {
         if (error) {
             console.error('Error al ejecutar la consulta:', error);
             return res.status(500).send('Error al eliminar el medicamento');

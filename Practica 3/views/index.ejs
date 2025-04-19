@@ -41,7 +41,7 @@
     
     <!-- Navbar -->
     <nav class="navbar navbar-expand-lg navbar-dark bg-primary shadow">
-        <a class="navbar-brand" href="#">MEDITEC</a>
+        <a class="navbar-brand" href="#">Libreria</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
@@ -53,7 +53,7 @@
                 </li>
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        Medicamento
+                        Libro
                     </a>
                     <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                         <a class="dropdown-item" href="#">Acciones</a>
@@ -74,7 +74,7 @@
     <div class="container mt-4">
         <!-- Botón de agregar -->
         <a href="/create" class="btn btn-primary btn-lg mb-4 shadow" data-toggle="modal" data-target="#modalAgregar">
-            <i class="fa-solid fa-plus"></i> Agregar Medicamento
+            <i class="fa-solid fa-plus"></i> Agregar Libro
         </a>
 
         <!-- Tabla -->
@@ -82,27 +82,29 @@
             <thead class="thead-dark">
                 <tr>
                     <th scope="col">#</th>
-                    <th scope="col">Nombre</th>
-                    <th scope="col">Descripción</th>
-                    <th scope="col">Precio</th>
-                    <th scope="col">Cantidad stock</th>
+                    <th scope="col">titulo</th>
+                    <th scope="col">autor</th>
+                    <th scope="col">genero</th>
+                    <th scope="col">anio_publicacion</th>
                     <th scope="col">Acciones</th>
+
+                    
                 </tr>
             </thead>
             <tbody>
                 <% let contador = 1; %>
-                <% results.forEach((medicamento) => { %>
+                <% results.forEach((libros) => { %>
                     <tr>
                         <th scope="row"><%= contador %></th>
-                        <td><%= medicamento.nombre %></td>
-                        <td><%= medicamento.descripcion %></td>
-                        <td><%= medicamento.precio %></td>
-                        <td><%= medicamento.cantidadStock %></td>
+                        <td><%= libros.titulo %></td>
+                        <td><%= libros.autor %></td>
+                        <td><%= libros.genero %></td>
+                        <td><%= libros.anio_publicacion %></td>
                         <td>
                             <!-- Botón para editar -->
-                            <a href="/edit/<%= medicamento.id %>" class="btn btn-info btn-sm mr-2">Editar</a>
+                            <a href="/edit/<%= libros.id %>" class="btn btn-info btn-sm mr-2">Editar</a>
                             <!-- Formulario para eliminar -->
-                            <form action="/delete/<%= medicamento.id %>" method="POST" style="display: inline;">
+                            <form action="/delete/<%= libros.id %>" method="POST" style="display: inline;">
                                 <button type="submit" class="btn btn-danger btn-sm">Eliminar</button>
                             </form>
                         </td>
@@ -117,7 +119,7 @@
             <div class="modal-dialog">
                 <div class="modal-content shadow">
                     <div class="modal-header bg-primary text-white">
-                        <h5 class="modal-title" id="modalAgregarLabel">Agregar Medicamento</h5>
+                        <h5 class="modal-title" id="modalAgregarLabel">Agregar libro</h5>
                         <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
@@ -125,20 +127,22 @@
                     <form action="/save" method="POST">
                         <div class="modal-body">
                             <div class="form-group">
-                                <label for="nombre">Nombre</label>
-                                <input type="text" class="form-control" name="nombre" id="nombre" required>
+                                <label for="titulo">titulo</label>
+                                <input type="text" class="form-control" name="titulo" id="titulo" required>
                             </div>
                             <div class="form-group">
-                                <label for="descripcion">Descripción</label>
-                                <textarea class="form-control" name="descripcion" id="descripcion" required></textarea>
+                                <label for="autor">autor</label>
+                                <input type="text" class="form-control" name="autor" id="autor" required>
                             </div>
                             <div class="form-group">
-                                <label for="precio">Precio</label>
-                                <input type="number" class="form-control" name="precio" id="precio" required>
+                                <label for="genero">genero</label>
+                                <input type="text" class="form-control" name="genero" id="genero" required>
                             </div>
+                            
+                            
                             <div class="form-group">
-                                <label for="cantidadStock">Cantidad en Stock</label>
-                                <input type="number" class="form-control" name="cantidadStock" id="cantidadStock" required>
+                                <label for="anio_publicacion">Anio Publicacion</label>
+                                <input type="number" class="form-control" name="anio_publicacion" id="anio_publicacion" required>
                             </div>
                         </div>
                         <div class="modal-footer">

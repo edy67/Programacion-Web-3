@@ -2,105 +2,77 @@ const express = require('express');
 const path = require('path');
 const dbController = require('./controllers/dbController');
 const readline = require('readline');
+const mysql = require('mysql2/promise');
 
 const app = express();
 const port = 3000;
 
-// Middleware para parsear los datos en formato JSON
 app.use(express.json());
-
-// Servir archivos estáticos de la carpeta 'public'
 app.use(express.static(path.join(__dirname, '../public')));
 
-// Rutas para las tres consultas
+// Rutas de consulta
 app.get('/basic-query', dbController.basicQuery);
 app.get('/promise-query', dbController.promiseQuery);
 app.get('/pool-query', dbController.poolQuery);
-
-// Ruta para agregar un nuevo usuario
-app.post('/add-user', dbController.addUser); 
-
-// Servir la página de inicio
+app.post('/add-user', dbController.addUser);
 app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, '../public/index.html'));
 });
 
-// Conectar a la base de datos (la misma conexión que usas en dbController)
-const mysql = require('mysql2/promise');
-const connection = mysql.createPool({
+// Crear conexiones a la BD
+const connectionPool = mysql.createPool({
   host: 'localhost',
   user: 'root',
   password: '',
   database: 'apli_usuarios'
 });
 
-// Configuración del readline para interactuar con la consola
+async function iniciarConexion() {
+  return await mysql.createConnection({
+    host: 'localhost',
+    user: 'root',
+    password: '',
+    database: 'apli_usuarios'
+  });
+}
+
+
 const rl = readline.createInterface({
   input: process.stdin,
   output: process.stdout
 });
 
-// Función para agregar un usuario desde la consola
-const agregarUsuarioConsola = async () => {
-  rl.question('Ingrese el nombre del usuario: ', async (nombre) => {
-    rl.question('Ingrese la edad del usuario: ', async (edad) => {
-      rl.question('Ingrese el email del usuario: ', async (email) => {
-        rl.question('Ingrese el teléfono del usuario: ', async (telefono) => {
-          rl.question('Ingrese la dirección del usuario: ', async (direccion) => {
-            const query = 'INSERT INTO usuarios (nombre, edad, email, telefono, direccion, fecha_registro) VALUES (?, ?, ?, ?, ?, NOW())';
-            try {
-              const [result] = await connection.execute(query, [nombre, edad, email, telefono, direccion]);
-              console.log('Usuario creado exitosamente con ID:', result.insertId);
-              rl.close();
-            } catch (err) {
-              console.error('Error al crear el usuario:', err);
-              rl.close();
-            }
-          });
-        });
-      });
-    });
-  });
-};
 
-// Función para eliminar un usuario desde la consola
-const eliminarUsuarioConsola = async () => {
-  rl.question('Ingrese el ID del usuario a eliminar: ', async (userId) => {
-    const query = 'DELETE FROM usuarios WHERE id = ?';
-    try {
-      const [result] = await connection.execute(query, [userId]);
-      if (result.affectedRows > 0) {
-        console.log('Usuario eliminado exitosamente.');
-      } else {
-        console.log('No se encontró un usuario con ese ID.');
-      }
-      rl.close();
-    } catch (err) {
-      console.error('Error al eliminar el usuario:', err);
-      rl.close();
-    }
-  });
-};
-
-// Función para actualizar un usuario desde la consola
 const actualizarUsuarioConsola = async () => {
+  const connectionDirecta = await iniciarConexion(); 
+
   rl.question('Ingrese el ID del usuario a actualizar: ', async (userId) => {
     rl.question('Ingrese el nuevo nombre del usuario: ', async (nombre) => {
-      rl.question('Ingrese la nueva edad del usuario: ', async (edad) => {  // Agregar la edad
+      rl.question('Ingrese la nueva edad del usuario: ', async (edad) => {
         rl.question('Ingrese el nuevo email del usuario: ', async (email) => {
           rl.question('Ingrese el nuevo teléfono del usuario: ', async (telefono) => {
             rl.question('Ingrese la nueva dirección del usuario: ', async (direccion) => {
               const query = 'UPDATE usuarios SET nombre = ?, edad = ?, email = ?, telefono = ?, direccion = ? WHERE id = ?';
+
               try {
-                const [result] = await connection.execute(query, [nombre, edad, email, telefono, direccion, userId]);
-                if (result.affectedRows > 0) {
-                  console.log('Usuario actualizado exitosamente.');
-                } else {
-                  console.log('No se encontró un usuario con ese ID.');
-                }
+                
+                const [resultExecute] = await connectionPool.execute(query, [nombre, edad, email, telefono, direccion, userId]);
+                const [array] = await connectionPool.query('SELECT * FROM usuarios');
+
+
+                
+                const [resultQueryPool] = await connectionPool.query(query, [nombre, edad, email, telefono, direccion, userId]);
+
+                
+                const [resultQueryDirect] = await connectionDirecta.query(query, [nombre, edad, email, telefono, direccion, userId]);
+
+                console.log('Usuario actualizado exitosamente.',array);
+
+                connectionDirecta.end(); 
                 rl.close();
               } catch (err) {
                 console.error('Error al actualizar el usuario:', err);
+                connectionDirecta.end();
                 rl.close();
               }
             });
@@ -110,28 +82,26 @@ const actualizarUsuarioConsola = async () => {
     });
   });
 };
-
-
-// Menú de la consola para elegir la operación
+// **Menú interactivo**
 const mostrarMenu = () => {
   console.log('Seleccione una opción:');
   console.log('U. Agregar usuario');
   console.log('V. Eliminar usuario');
   console.log('T. Actualizar usuario');
   console.log('4. Salir');
-  
+
   rl.question('Ingrese una opción: ', (opcion) => {
     switch (opcion.toUpperCase()) {
-      case 'U': // Agregar usuario
+      case 'U':
         agregarUsuarioConsola();
         break;
-      case 'V': // Eliminar usuario
+      case 'V':
         eliminarUsuarioConsola();
         break;
-      case 'T': // Actualizar usuario
+      case 'T':
         actualizarUsuarioConsola();
         break;
-      case '4': // Salir
+      case '4':
         rl.close();
         break;
       default:
@@ -142,7 +112,7 @@ const mostrarMenu = () => {
   });
 };
 
-// Llamar al menú inicial cuando el servidor esté listo
+// **Iniciar servidor**
 app.listen(port, () => {
   console.log(`Servidor corriendo en http://localhost:${port}`);
   mostrarMenu();

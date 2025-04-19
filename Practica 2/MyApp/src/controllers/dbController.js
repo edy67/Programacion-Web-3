@@ -5,13 +5,13 @@ const mysqlPromise = require('mysql2/promise');
 const basicConnection = mysql.createConnection({
   host: 'localhost',
   user: 'root',
-  password: '', // Sin contraseña
+  password: '', 
   database: 'apli_usuarios'
 });
 
 // Función de consulta básica
 const basicQuery = (req, res) => {
-  const start = Date.now(); // Captura el tiempo al inicio
+  const start = Date.now(); 
   console.time('basicQuery');
   
   basicConnection.query('SELECT * FROM usuarios', (err, results) => {
@@ -20,8 +20,8 @@ const basicQuery = (req, res) => {
       res.status(500).send('Error en la consulta');
       return;
     }
-    const end = Date.now(); // Captura el tiempo después de la consulta
-    const elapsed = end - start; // Calcula el tiempo transcurrido
+    const end = Date.now(); 
+    const elapsed = end - start; 
 
     console.timeEnd('basicQuery');
     res.json({
@@ -31,11 +31,11 @@ const basicQuery = (req, res) => {
   });
 };
 
-// Conexión con Promesas (utilizando createPool)
+// Conexión con Promesas 
 const promisePool = mysqlPromise.createPool({
   host: 'localhost',
   user: 'root',
-  password: '', // Sin contraseña
+  password: '', 
   database: 'apli_usuarios',
   waitForConnections: true,
   connectionLimit: 10,
@@ -62,7 +62,15 @@ const promiseQuery = async (req, res) => {
     res.status(500).send('Error en la consulta');
   }
 };
-
+const Pool = mysqlPromise.createPool({
+  host: 'localhost',
+  user: 'root',
+  password: '', 
+  database: 'apli_usuarios',
+  waitForConnections: true,
+  connectionLimit: 10,
+  queueLimit: 0
+});
 // Función de consulta con Pooling
 const poolQuery = async (req, res) => {
   const start = Date.now(); // Captura el tiempo al inicio
@@ -84,9 +92,9 @@ const poolQuery = async (req, res) => {
   }
 };
 
-// Función para insertar un usuario en la base de datos (con edad)
+
 const addUser = async (req, res) => {
-  const { nombre, edad, email, telefono, direccion } = req.body; // Obtener los datos del formulario
+  const { nombre, edad, email, telefono, direccion } = req.body; 
 
   const query = 'INSERT INTO usuarios (nombre, edad, email, telefono, direccion) VALUES (?, ?, ?, ?, ?)';
   
@@ -94,7 +102,7 @@ const addUser = async (req, res) => {
     const [result] = await promisePool.execute(query, [nombre, edad, email, telefono, direccion]);
     res.json({
       message: 'Usuario creado exitosamente',
-      id: result.insertId,  // Devolver el ID del nuevo usuario insertado
+      id: result.insertId,  
     });
   } catch (err) {
     console.error(err);
@@ -106,5 +114,5 @@ module.exports = {
   basicQuery,
   promiseQuery,
   poolQuery,
-  addUser,  // Asegurarse de exportar la nueva función
+  addUser,  
 };
